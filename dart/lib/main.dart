@@ -1,3 +1,6 @@
+import 'package:dart/Person.dart';
+import 'package:dart/Student.dart';
+
 void main() {
   print("Variable");
   // var를 이용해서 변수를 선언하면 자료형 고정
@@ -121,7 +124,39 @@ void main() {
   } catch(e) {
     print(e);
   }
+
+  // 객체 지향 프로그래밍
+  // 클래스
+  print("\nClass");
+  Person john = Person("john", 19);
+  print("jogn.introduce();");
+  john.introduce();
+
+  Map<String, dynamic> personMap = {
+    "name": "tom",
+    "age": 20
+  };
+  Person tom = Person.fromMap(personMap);
+  print("tom.introduce();");
+  tom.introduce();
+
+  // inheritance
+  print("\nInheritance");
+  Student student = Student("student", 20, "Computer");
+  print("student.introduce();");
+  student.introduce();
+
+  // Mixin
+  print("\nMixin");
+  print("student.breakfast();");
+  student.breakfast();
+
+  // Cascade operator
+  print("\nCascade Operator");
+  student..introduce()..lunch();
 }
+
+// 기초 문법
 int subtractTwoNumbers(int first, int second) {
   return first - second;
 }
@@ -143,3 +178,5 @@ int addThreeNumbersMixed(int first, {required int second, int third = 3}) {
 }
 
 typedef Operation = int Function(int a, int b); // 함수를 변경 가능
+
+// 객체 지향 프로그래밍
