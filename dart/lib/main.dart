@@ -1,5 +1,5 @@
-import 'package:dart/Person.dart';
-import 'package:dart/Student.dart';
+import 'package:dart/person.dart';
+import 'package:dart/student.dart';
 
 void main() {
   print("Variable");

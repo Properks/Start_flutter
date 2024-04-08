@@ -1,5 +1,5 @@
-import 'package:dart/Mixin.dart';
-import 'package:dart/Person.dart';
+import 'package:dart/mixin.dart';
+import 'package:dart/person.dart';
 
 class Student extends Person with Meal{
 

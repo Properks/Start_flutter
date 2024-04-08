@@ -1,11 +1,11 @@
-import 'package:dart/Person.dart';
+import 'package:dart/person.dart';
 
-class Empolyee implements Person {
+class Employee implements Person {
   final String name;
   final int age;
   final String department;
 
-  Empolyee(this.name, this.age, this.department);
+  Employee(this.name, this.age, this.department);
 
   @override
   void introduce() { // 함수 구현
