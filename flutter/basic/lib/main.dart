@@ -4,9 +4,14 @@ void main() {
   runApp(
       const MaterialApp(
         home: Scaffold(
-          body: Center(
-            child: Text(
-              "Hello world!",
+          body: SizedBox(
+            width: double.infinity,
+            child: Column(  // child는 하나의 자식만 가질 수 있다
+              mainAxisAlignment: MainAxisAlignment.center, // align center
+              children: [ // children은 여러 자식을 가질 수 있다
+                Text("Hello"),
+                Text("World!"),
+              ],
             ),
           ),
         ),
