@@ -19,68 +19,136 @@ class MyApp extends StatelessWidget {
           ),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-             const Text(
-               "버튼 연습", // 작성하고 싶은 글
-               style: TextStyle(
-                 fontSize: 16, // 글자 크기
-                 fontWeight: FontWeight.w700, // 글자 굵기
-                 color: Colors.cyanAccent, // 글자 색
-               ),
-             ),
-              TextButton(
-                // 클릭시 실행할 함수
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.red,
+          // SafeArea 노치 디자인등이 위젯을 가리는 것을 방지, true 면 가리지 않도록 safearea에 적용
+          child: SafeArea(
+            top: true,
+            bottom: true,
+            right: true,
+            left: true,
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "버튼 연습", // 작성하고 싶은 글
+                      style: TextStyle(
+                        fontSize: 16, // 글자 크기
+                        fontWeight: FontWeight.w700, // 글자 굵기
+                        color: Colors.cyanAccent, // 글자 색
+                      ),
+                    ),
+                    TextButton(
+                      // 클릭시 실행할 함수
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.red,
+                      ),
+                      child: const Text("텍스트 버튼"),
+                    ),
+                    OutlinedButton(
+                      // 클릭시 실행할 함수
+                      onPressed: (){},
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.green,
+                      ),
+                      child: const Text("Outlined button"),
+                    ),
+                    ElevatedButton(
+                      // 클릭시 실행할 함수
+                      onPressed: (){},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      ),
+                      child: const Text(
+                        "Elevated button",
+                        style: TextStyle(
+                            color: Colors.white
+                        ),),
+                    ),
+                    IconButton(
+                      // 클릭시 실행할 함수
+                      onPressed: (){},
+                      icon: const Icon(Icons.home),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        print("on tap");
+                      },
+                      onDoubleTap: () {
+                        print("on double tap");
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.amber
+                        ),
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text("텍스트 버튼"),
-              ),
-              OutlinedButton(
-                // 클릭시 실행할 함수
-                onPressed: (){},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.green,
-                ),
-                child: const Text("Outlined button"),
-              ),
-              ElevatedButton(
-                // 클릭시 실행할 함수
-                onPressed: (){},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                ),
-                child: const Text(
-                  "Elevated button",
-                  style: TextStyle(
-                      color: Colors.white
-                  ),),
-              ),
-              IconButton(
-                // 클릭시 실행할 함수
-                onPressed: (){},
-                icon: const Icon(Icons.home),
-              ),
-              GestureDetector(
-                onTap: () {
-                  print("on tap");
-                },
-                onDoubleTap: () {
-                  print("on double tap");
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.amber
-                  ),
-                  width: 100,
-                  height: 100,
-                ),
-              ),
 
-            ]
-          ),
+                //container
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        // padding container와 위젯 사이의 공백을 두고 싶을 때
+                        padding: const EdgeInsets.all(
+                            10.0
+                        ),
+
+                        // margin 바깥 여백 설정
+                        margin: const EdgeInsets.all(
+                            5.0
+                        ),
+
+                        decoration: BoxDecoration(
+                          // 배경색
+                          color: Colors.blue,
+
+                          // 테두리
+                          border: Border.all(
+                            // 테두리 굵기
+                            width: 10,
+                            // 테두리 색
+                            color: Colors.amber,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        // 넓이
+                        width: 100,
+                        //높이
+                        height: 200,
+
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                color: Colors.red,
+                                width: double.maxFinite,
+                                height: 75,
+                              ),
+
+                              // SizedBox 일정 크기의 공백을 두고 싶을 때
+                              const SizedBox(
+                                height: 10,
+                                width: 200,
+                              ),
+                              Container(
+                                color: Colors.red,
+                                width: double.maxFinite,
+                                height: 75,
+                              ),
+                            ]
+                        ),
+                      ),
+                    ]
+                ),
+              ],
+            ),
+          )
         ),
       ),
     );
