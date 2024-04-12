@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const RowWidgetExample());
 }
 
 class MyApp extends StatelessWidget {
@@ -147,6 +147,172 @@ class MyApp extends StatelessWidget {
                     ]
                 ),
               ],
+            ),
+          )
+        ),
+      ),
+    );
+  }
+}
+
+class RowWidgetExample extends StatelessWidget {
+  const RowWidgetExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: SizedBox(
+
+          // 반대 축에서 이동할 공간을 제공하기 위한 높이 설정
+          height: double.infinity,
+          child: SafeArea(
+            top: true,
+            left: true,
+            right: true,
+            bottom: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: const Text(
+                    "ROW"
+                  ),
+                ),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 150,
+                      child: Text(
+                        "Row main \nstart",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Row(
+                          // 주축 설정, Row의 주축은 가로
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          // 반대축 설정, Column의 주축은 세로
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5,),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 150,
+                      child: Text(
+                        "Row main\nspaceBetween",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                color: Colors.red,
+                              ),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                color: Colors.green,
+                              ),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5,),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 150,
+                      child: Text(
+                        "Row main \nspaceEvenly",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Row(
+
+                          // 주축 설정, Row의 주축은 가로
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          // 반대축 설정, Column의 주축은 세로
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      )
+                    ),
+                  ],
+                ),
+              ]
             ),
           )
         ),
