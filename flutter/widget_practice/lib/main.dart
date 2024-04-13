@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const RowWidgetExample());
+  runApp(const StackExample());
 }
+
+// Container vs SizedBox
+// Container는 보통 장식을 위해 사용되고 SizedBox는 장식을 제공하지는 않지만 더 나은 성능을 가지고 있다.
+// SizedBox는 장식이 필요없을 때 사용하는 빈 Container라고 생각하면 될 듯 하다.
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -165,7 +169,7 @@ class RowWidgetExample extends StatelessWidget {
         body: SizedBox(
 
           // 반대 축에서 이동할 공간을 제공하기 위한 높이 설정
-          height: double.infinity,
+          width: double.infinity,
           child: SafeArea(
             top: true,
             left: true,
@@ -315,6 +319,265 @@ class RowWidgetExample extends StatelessWidget {
               ]
             ),
           )
+        ),
+      ),
+    );
+  }
+}
+
+class ColumnWidgetExample extends StatelessWidget {
+  const ColumnWidgetExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: SizedBox(
+          height: double.infinity,
+          child: SafeArea(
+            top: true,
+            right: true,
+            bottom: true,
+            left: true,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  child: Text(
+                    "Column",
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        "Col Main\nstart\n",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible( // 남은 공간 차지
+                      flex: 1, // 공간을 차지하는 비율
+                      fit: FlexFit.tight,
+                      // tight: 남은 공간 최대한 차지. loose: 필요한 만큼 공간 차지
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        "Col Main\nspace\nBetween",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded( // Flexible, FlexFit.tight
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        "Col Main\nspace\nAround",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      child: Text(
+                        "Col Main\nspace\nEvenly",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.red,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.green,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StackExample extends StatelessWidget {
+  const StackExample({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: SizedBox(
+          width: double.infinity,
+          child: SafeArea(
+            top: true,
+            right: true,
+            bottom: true,
+            left: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  color: Colors.amber,
+                  child: const Text(
+                    "Stack",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.blue
+                    ),
+                  ),
+                ),
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 300,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      width: 200,
+                      height: 200,
+                      color: Colors.red,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.yellow,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
