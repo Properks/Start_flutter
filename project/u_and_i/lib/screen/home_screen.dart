@@ -27,23 +27,37 @@ class _DDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         const SizedBox(height: 16),
-        const Text("U & i"),
+        Text(
+          "U & i",
+          style: textTheme.headlineLarge,
+        ),
         const SizedBox(height: 16),
-        const Text("처음 만난 날"),
-        const Text("2022.12.31"),
+        Text(
+          "처음 만난 날",
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          "2022.12.31",
+          style: textTheme.bodyMedium,
+        ),
         const SizedBox(height: 16),
         IconButton(
           iconSize: 60,
           onPressed: () {},
           icon: const Icon(
-              Icons.favorite
+            Icons.favorite,
+            color: Colors.red,
           ),
         ),
         const SizedBox(height: 16),
-        const Text("D + 365"),
+        Text(
+          "D + 365",
+          style: textTheme.bodyMedium,
+        ),
       ],
     );
   }
@@ -54,12 +68,15 @@ class _CoupleImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        "assets/img/middle_image.png",
+    return Expanded( // height을 지정해줘서 overflow가 발생,
+      // 이를 해결하기 위해 Expanded를 사용하여 남는 공간만 사용하도록 하기
+      child: Center(
+        child: Image.asset(
+          "assets/img/middle_image.png",
 
-        // 화면의 크기를 가지고 와서 높이에 2를 나눈 값
-        height: MediaQuery.of(context).size.height / 2,
+          // 화면의 크기를 가지고 와서 높이에 2를 나눈 값
+          // height: MediaQuery.of(context).size.height / 2,
+        ),
       ),
     );
   }

@@ -12,6 +12,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: "sunflower",
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 80,
+            fontWeight: FontWeight.w700,
+            fontFamily: "parisienne",
+          ),
+          headlineMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 50,
+            fontWeight: FontWeight.w700,
+          ),
+          bodyLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 30
+          ),
+          bodyMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      ),
       home: HomeScreen(),
     );
   }
