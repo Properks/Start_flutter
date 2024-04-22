@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeScreenState();
+  }
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  DateTime firstDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -9,21 +20,28 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         top:true,
         bottom: true,
-          child: Column(
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _DDay(),
+              _DDay(
+                onHeartPressed: onHeartPressed,
+              ),
               _CoupleImage(),
             ]
-          ),
+        ),
       ),
     );
   }
 }
 
+void onHeartPressed() {
+  print("출력");
+}
+
 class _DDay extends StatelessWidget {
-  _DDay({super.key});
+  _DDay({required this.onHeartPressed});
+  final GestureTapCallback onHeartPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +65,7 @@ class _DDay extends StatelessWidget {
         const SizedBox(height: 16),
         IconButton(
           iconSize: 60,
-          onPressed: () {},
+          onPressed: onHeartPressed,
           icon: const Icon(
             Icons.favorite,
             color: Colors.red,
@@ -64,8 +82,6 @@ class _DDay extends StatelessWidget {
 }
 
 class _CoupleImage extends StatelessWidget {
-  _CoupleImage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Expanded( // height을 지정해줘서 overflow가 발생,
