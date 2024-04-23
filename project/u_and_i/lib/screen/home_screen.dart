@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  DateTime firstDay = DateTime.now();
+  DateTime firstDay = DateTime(2022, 12, 31);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _DDay(
                 onHeartPressed: onHeartPressed,
+                firstDay: firstDay,
               ),
               _CoupleImage(),
             ]
@@ -33,19 +34,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  void onHeartPressed(){
+    setState(() {
+      firstDay = firstDay.subtract(const Duration(days: 1));
+    });
+  }
 }
 
-void onHeartPressed() {
-  print("출력");
-}
+
 
 class _DDay extends StatelessWidget {
-  _DDay({required this.onHeartPressed});
+  _DDay({
+    required this.onHeartPressed,
+    required this.firstDay
+  });
   final GestureTapCallback onHeartPressed;
+  final DateTime firstDay;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final now = DateTime.now();
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -59,7 +69,7 @@ class _DDay extends StatelessWidget {
           style: textTheme.bodyLarge,
         ),
         Text(
-          "2022.12.31",
+          "${firstDay.year}.${firstDay.month}.${firstDay.day}",
           style: textTheme.bodyMedium,
         ),
         const SizedBox(height: 16),
@@ -73,7 +83,7 @@ class _DDay extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          "D + 365",
+          "D+${now.difference(firstDay).inDays + 1}",
           style: textTheme.bodyMedium,
         ),
       ],
