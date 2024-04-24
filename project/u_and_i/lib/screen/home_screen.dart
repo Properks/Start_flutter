@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -37,7 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onHeartPressed(){
     setState(() {
-      firstDay = firstDay.subtract(const Duration(days: 1));
+      showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.date,
+              onDateTimeChanged: (DateTime time) {
+
+              },);
+          },);
     });
   }
 }
