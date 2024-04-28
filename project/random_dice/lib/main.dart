@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:random_dice/const/colors.dart';
 import 'package:random_dice/screen/home_screen.dart';
+import 'package:random_dice/screen/root_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: backgroundColor,
-        sliderTheme: const SliderThemeData(
+        sliderTheme: SliderThemeData(
           thumbColor: primaryColor,
           activeTrackColor: primaryColor,
+          inactiveTrackColor: primaryColor.withOpacity(0.4),
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: primaryColor,
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: backgroundColor,
         ),
       ),
-      home: HomeScreen(),
+      home: RootScreen(),
     );
   }
 }
