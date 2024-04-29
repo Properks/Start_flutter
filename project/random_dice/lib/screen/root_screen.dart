@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:random_dice/screen/home_screen.dart';
+import 'package:random_dice/screen/setting_screen.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -11,6 +13,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{ // Mixin 사용으로 불필요한 렌더링 감소
   TabController? tabController; // Controller 선언
+  double threshold = 2.7;
 
   @override
   void initState() {
@@ -45,25 +48,10 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{ 
 
   List<Widget> renderChildren() {
     return [
-      Container(
-        child: Center(
-          child: Text(
-            "Tab 1",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      Container(
-        child: Center(
-          child: Text(
-            "Tab 2",
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
+      HomeScreen(number: 1),
+      SettingScreen(
+          threshold: threshold,
+          onThresholdChanged: onThresholdChanged
       ),
     ];
   }
@@ -93,5 +81,11 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{ 
         ),
       ]
     );
+  }
+
+  void onThresholdChanged(double val) {
+    setState(() {
+      threshold = val;
+    });
   }
 }
