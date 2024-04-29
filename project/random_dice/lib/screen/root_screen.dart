@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:random_dice/screen/home_screen.dart';
 import 'package:random_dice/screen/setting_screen.dart';
+import 'package:shake/shake.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -14,26 +17,39 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{ // Mixin 사용으로 불필요한 렌더링 감소
   TabController? tabController; // Controller 선언
   double threshold = 2.7;
+  int number = 1;
+  ShakeDetector? shakeDetector;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this); // Controller 초기화
+    shakeDetector = ShakeDetector.autoStart(
+      shakeSlopTimeMS: 100, // 흔들기 감지 시간 100: 100ms
+      shakeThresholdGravity: threshold, // 흔들기 민감도
+      onPhoneShake: onPhoneShake
+    );
     // tabController!.addListener(tabListener);
   }
 
+  void onPhoneShake() {
+    final rand = Random();
+    setState(() {
+      number = rand.nextInt(5) + 1;
+    });
+  }
 
-  // tabListener() { // controller를 위한 listener
-  //   setState(() {
-  //
-  //   }); // build 함수를 재실행하기 위해 설정
-  // }
-  //
-  // @override
-  // void dispose() { // controller에 등록된 listener 삭제
-  //   tabController!.removeListener(tabListener);
-  //   super.dispose();
-  // }
+
+  tabListener() { // controller를 위한 listener
+    setState(() {}); // build 함수를 재실행하기 위해 설정
+  }
+
+  @override
+  void dispose() { // controller에 등록된 listener 삭제
+    tabController!.removeListener(tabListener);
+    shakeDetector!.stopListening();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +64,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{ 
 
   List<Widget> renderChildren() {
     return [
-      HomeScreen(number: 1),
+      HomeScreen(number: number),
       SettingScreen(
           threshold: threshold,
           onThresholdChanged: onThresholdChanged
