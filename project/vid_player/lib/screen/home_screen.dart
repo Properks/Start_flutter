@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vid_player/component/custom_video_player.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -36,7 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _Logo(),
+          _Logo(
+            onTap: onNewVideoPressed,
+          ),
           const SizedBox(height: 30),
           _AppName()
         ],
@@ -57,19 +60,44 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void onNewVideoPressed() async {
+    final video = await ImagePicker().pickVideo( // ImagePicker를 사용하여 비디오 선택
+        source: ImageSource.gallery // 갤러리에서 선택
+    );
+
+    if (video != null) {
+      setState(() {
+        this.video = video;
+      });
+    }
+  }
+
   Widget renderVideo() { // video가 있을 때 함수
-    return Container();
+    return Center(
+      child: CustomVideoPlayer(
+        video: video!,
+      ),
+    );
   }
 }
 
 class _Logo extends StatelessWidget{
-  const _Logo({super.key});
+  final GestureTapCallback onTap;
+
+  const _Logo({
+    required this.onTap,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      "asset/img/logo.png",
+    return GestureDetector(
+      onTap: onTap,
+      child: Image.asset(
+        "asset/img/logo.png",
+      ),
     );
+
   }
 }
 
