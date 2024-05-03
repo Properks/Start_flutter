@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vid_player/component/custom_icon_button.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io';
 
@@ -48,9 +49,55 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
     return AspectRatio( // video의 비율에 맞게 설정
       aspectRatio: videoPlayerController!.value.aspectRatio,
-      child: VideoPlayer( // video player 설정
-        videoPlayerController!,
-      )
+      child: Stack(
+        children: [
+          VideoPlayer( // video player 설정
+            videoPlayerController!,
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: Slider(
+              onChanged: (double val){
+                videoPlayerController!.seekTo(
+                  Duration(seconds: val.toInt())
+                );
+              },
+              value: videoPlayerController!.value.position.inSeconds.toDouble(),
+              min: 0,
+              max: videoPlayerController!.value.duration.inSeconds.toDouble(),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: CustomIconButton(
+              onPressed: () {},
+              icon: Icons.photo_camera_back,
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomIconButton(
+                    onPressed: () {},
+                    icon: Icons.rotate_left
+                ),
+                CustomIconButton(
+                    onPressed: () {},
+                    icon: Icons.play_arrow
+                ),
+                CustomIconButton(
+                    onPressed: () {},
+                    icon: Icons.rotate_right
+                ),
+              ],
+            ),
+          )
+        ]
+      ),
     );
   }
 }
