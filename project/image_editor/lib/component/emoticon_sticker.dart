@@ -28,7 +28,7 @@ class _EmoticonStickerState extends State<EmoticonSticker> {
   @override
   Widget build(BuildContext context) {
     return Transform(
-      transform: Matrix4.identity()
+      transform: Matrix4.identity() // 위치, 크기 변경 적용을 위해
       ..translate(hTransform, vTransform)
       ..scale(scale, scale),
       child: Container(
@@ -46,7 +46,7 @@ class _EmoticonStickerState extends State<EmoticonSticker> {
                 width: 1.0
               )
             ),
-        child: GestureDetector(
+        child: GestureDetector( // Gesture에 따라 작동
           onTap: () {
             widget.onTransform(); // ()를 붙여야 함수가 실행
           },
