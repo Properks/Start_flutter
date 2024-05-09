@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:image_editor/component/emoticon_sticker.dart';
 import 'package:image_editor/component/main_app_bar.dart';
 import 'package:image_editor/component/footer.dart';
+import 'package:image_editor/model/sticker_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:io';
+
 
 class HomeScreen extends StatefulWidget {
 
@@ -17,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>{
 
   XFile? image;
+  Set<StickerModel> stickers = {}; // 생성된 이모티콘 관리
+  String? selectedId;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +71,22 @@ class _HomeScreenState extends State<HomeScreen>{
     }
     return Positioned.fill(
       child: InteractiveViewer(
-        child: Image.file(
-          File(image!.path),
+        child: Stack(
+          children: [
+            Image.file(
+              File(image!.path),
+            ),
+            ...stickers.map((e) => Center( // ...stickers => stickers의 값들을 가져오기
+              child: EmoticonSticker( // 생성된 이모티콘을 화면에 표시
+                key: ObjectKey(e.id),
+                imgPath: e.imgPath,
+                isSelected: selectedId == e.id,
+                onTransform: () {
+                  onTransform(e.id);
+                },
+              ),
+            )),
+          ],
         ),
       ),
     );
@@ -83,5 +103,20 @@ class _HomeScreenState extends State<HomeScreen>{
 
   void onDeleteImage() {}
 
-  void onEmotionTap(int index) {}
+  void onEmotionTap(int index) async{
+    final Set<StickerModel> stickers = Set.from(this.stickers);
+    stickers.add(StickerModel(
+        id: Uuid().v4(),
+        imgPath: "assets/img/emoticon_$index.png"
+    ));
+    setState(() {
+      this.stickers = stickers;
+    });
+  }
+
+  void onTransform(String id) {
+    setState(() {
+      selectedId = id;
+    });
+  }
 }
