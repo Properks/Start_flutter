@@ -15,7 +15,6 @@ class MainCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
-
       onDaySelected: onDaySelected, // 날짜가 선택되었을 때 실행할 함수
       selectedDayPredicate: (date) => // boolean으로 반환해 true면 선택된 날짜, false면 선택되지 않은 날짜로 선정
         date.year == selectedDate.year &&

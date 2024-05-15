@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scheduler/component/main_calendar.dart';
+import 'package:scheduler/component/schedule_card.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               selectedDate: selectedDate,
               onDaySelected: onDaySelected,
             ),
+            ScheduleCard(startTime: 13, endTime: 14, content: "공부")
           ],
         ),
       ),
@@ -33,10 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    setState(() {
-      this.selectedDate = selectedDate;
-      print("Selectd: " + selectedDate.toString() + ", Focus: " + focusedDate.toString());
-      // 아직은 두개의 값이 같다.
-    });
+    if (this.selectedDate != selectedDate) { // 같은 날짜 선택 시 build함수를 재실행하지 않도록
+      setState(() {
+        this.selectedDate = selectedDate;
+        print("Selectd: " + selectedDate.toString() + ", Focus: " + focusedDate.toString());
+        // 아직은 두개의 값이 같다.
+      });
+    }
   }
 }
