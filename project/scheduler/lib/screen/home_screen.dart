@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scheduler/component/main_calendar.dart';
+import 'package:scheduler/component/schedule_bottom_sheet.dart';
 import 'package:scheduler/component/schedule_card.dart';
+import 'package:scheduler/component/today_banner.dart';
+import 'package:scheduler/const/colors.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -20,6 +23,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: PRIMARY_COLOR,
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isDismissible: true, // 배경 탭하면 창 닫기
+              builder: (_)  => ScheduleBottomSheet()
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -27,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               selectedDate: selectedDate,
               onDaySelected: onDaySelected,
             ),
+            TodayBanner(selectedDate: selectedDate, count: 0),
             ScheduleCard(startTime: 13, endTime: 14, content: "공부")
           ],
         ),
