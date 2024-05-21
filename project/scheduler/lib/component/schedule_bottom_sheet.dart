@@ -15,12 +15,13 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom; // 가상 키보드의 높이 가져오기
     return SafeArea(
       child: Container(
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 2 + bottomInset,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: bottomInset),
           child: Column(
             children: [
               const Row(

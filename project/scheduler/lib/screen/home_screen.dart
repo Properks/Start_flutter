@@ -27,9 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: PRIMARY_COLOR,
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              isDismissible: true, // 배경 탭하면 창 닫기
-              builder: (_)  => ScheduleBottomSheet()
+            context: context,
+            isDismissible: true, // 배경 탭하면 창 닫기
+            builder: (_)  => ScheduleBottomSheet(),
+            isScrollControlled: true, // 스크롤이 가능하도록
           );
         },
         child: const Icon(
