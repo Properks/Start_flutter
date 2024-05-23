@@ -6,10 +6,14 @@ class CustomTextField extends StatelessWidget {
 
   final String label;
   final bool isTime;
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator; // valid한지 확인
 
   const CustomTextField({
     required this.label,
     required this.isTime,
+    required this.onSaved,
+    required this.validator,
     super.key
   });
 
@@ -28,6 +32,8 @@ class CustomTextField extends StatelessWidget {
         Expanded(
           flex: isTime ? 0 : 1,
           child: TextFormField(
+            onSaved: onSaved,
+            validator: validator,
             cursorColor: Colors.grey,
             maxLines: isTime ? 1 : null, // null이면 제한 없음
             expands: !isTime, // 시간이면 부모 공간 만큼 차지, 아니면 최소 공간

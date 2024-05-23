@@ -29,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
           showModalBottomSheet(
             context: context,
             isDismissible: true, // 배경 탭하면 창 닫기
-            builder: (_)  => ScheduleBottomSheet(),
+            builder: (_)  => ScheduleBottomSheet(
+              selectedDate: selectedDate,
+            ),
             isScrollControlled: true, // 스크롤이 가능하도록
           );
         },

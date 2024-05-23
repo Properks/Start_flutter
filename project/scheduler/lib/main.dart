@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:scheduler/database/drift_database.dart';
 import 'package:scheduler/screen/home_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -6,6 +8,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 플러터 프레임 워크 준비
 
   await initializeDateFormatting(); // intl 패키지 초기화 (다국어화)
+
+  final database = LocalDatabase();
+
+  GetIt.I.registerSingleton<LocalDatabase>(database); // GetIt: 의존성 주입을 구현하여 프로젝트 전역에서 사용 가능하도록
   runApp(const MyApp());
 }
 
