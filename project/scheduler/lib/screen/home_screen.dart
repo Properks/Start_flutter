@@ -4,6 +4,8 @@ import 'package:scheduler/component/schedule_bottom_sheet.dart';
 import 'package:scheduler/component/schedule_card.dart';
 import 'package:scheduler/component/today_banner.dart';
 import 'package:scheduler/const/colors.dart';
+import 'package:get_it/get_it.dart';
+import 'package:scheduler/database/drift_database.dart';
 
 class HomeScreen extends StatefulWidget{
 
@@ -47,8 +49,50 @@ class _HomeScreenState extends State<HomeScreen> {
               selectedDate: selectedDate,
               onDaySelected: onDaySelected,
             ),
-            TodayBanner(selectedDate: selectedDate, count: 0),
-            ScheduleCard(startTime: 13, endTime: 14, content: "공부")
+            const SizedBox(height: 8,),
+            StreamBuilder<List<Schedule>>(
+              stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
+              builder: (context, snapshot) {
+                return TodayBanner(
+                  selectedDate: selectedDate,
+                  count: snapshot.data?.length ?? 0
+                  // count: snapshot.hasData ? snapshot.data!.length : 0
+                );
+              },
+            ),
+            const SizedBox(height: 8,),
+            Expanded(
+              child: StreamBuilder<List<Schedule>>( // 데이터가 변경되면 새로 build
+                stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate), // watchSchedule이 Stream을 반환
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final schedule = snapshot.data![index];
+                      return Dismissible(
+                        key: ObjectKey(schedule.id), // 키 값을 schedule의 키로
+                        direction: DismissDirection.startToEnd, // 왼쪽에서 오른쪽으로 밀기
+                        onDismissed: (DismissDirection direction) {
+                          GetIt.I<LocalDatabase>()
+                              .removeSchedule(schedule.id);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                          child: ScheduleCard(
+                            startTime: schedule.startTime,
+                            endTime: schedule.endTime,
+                            content: schedule.content,
+                          )
+                        )
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

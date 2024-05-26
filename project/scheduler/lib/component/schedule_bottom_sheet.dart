@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scheduler/component/custom_text_field.dart';
 import 'package:scheduler/const/colors.dart';
+import 'package:drift/drift.dart' hide Column;
+import 'package:get_it/get_it.dart';
+import 'package:scheduler/database/drift_database.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -92,13 +95,20 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     );
   }
 
-  void onSavedPressed() {
+  void onSavedPressed() async {
     if (key.currentState!.validate()) {
       key.currentState!.save();
 
-      print("Start time: $startTime");
-      print("End time: $endTime");
-      print("Content: $content");
+      await GetIt.I<LocalDatabase>().createSchedule(
+        SchedulesCompanion(
+          startTime: Value(startTime!),
+          endTime: Value(endTime!),
+          content: Value(content!),
+          date: Value(widget.selectedDate)
+        )
+      );
+
+      Navigator.of(context).pop();
     }
   }
 
