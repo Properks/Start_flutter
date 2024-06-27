@@ -28,6 +28,7 @@ class ScheduleProvider extends ChangeNotifier {
     final resp = await repository.getSchedules(date: date);
     cache.update(date, (value) => resp, ifAbsent: () => resp);// 존재하면 value를 resp로 없으면 resp 추가
     notifyListeners(); // 현재 listen하고 있는 위젯들을 다시 build
+    // cache가 업데이트 될 때마다 업데이트하기 위해서
   }
 
   void createSchedule({

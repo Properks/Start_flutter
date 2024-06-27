@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scheduler/component/custom_text_field.dart';
 import 'package:scheduler/const/colors.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:get_it/get_it.dart';
 import 'package:scheduler/database/drift_database.dart';
+import 'package:scheduler/model/schedule_model.dart';
+import 'package:scheduler/provider/schedule_provider.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -75,7 +78,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: onSavedPressed,
+                    onPressed: () => onSavedPressed(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,
                     ),
@@ -95,20 +98,19 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     );
   }
 
-  void onSavedPressed() async {
+  void onSavedPressed(BuildContext context) async {
     if (key.currentState!.validate()) {
       key.currentState!.save();
 
-      await GetIt.I<LocalDatabase>().createSchedule(
-        SchedulesCompanion(
-          startTime: Value(startTime!),
-          endTime: Value(endTime!),
-          content: Value(content!),
-          date: Value(widget.selectedDate)
-        )
-      );
+      context.read<ScheduleProvider>().createSchedule(model: ScheduleModel(
+        id: 'new model', // 임시 ID
+        content: content!,
+        date: widget.selectedDate,
+        startTime: startTime!,
+        endTime: endTime!,
+      ));
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // 현재 스택에서 화면 제거. 즉, 현재 화면에서 Bottom sheet 제거
     }
   }
 

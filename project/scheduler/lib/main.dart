@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:scheduler/database/drift_database.dart';
+import 'package:scheduler/provider/schedule_provider.dart';
+import 'package:scheduler/repository/schedule_repository.dart';
 import 'package:scheduler/screen/home_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -12,10 +15,18 @@ void main() async {
   final database = LocalDatabase();
 
   GetIt.I.registerSingleton<LocalDatabase>(database); // GetIt: 의존성 주입을 구현하여 프로젝트 전역에서 사용 가능하도록
-  runApp(const MyApp());
+  final repository = ScheduleRepository();
+  final scheduleProvider = ScheduleProvider(repository: repository);
+  runApp(
+      ChangeNotifierProvider(
+        create: (_) => scheduleProvider,
+        child: const MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
