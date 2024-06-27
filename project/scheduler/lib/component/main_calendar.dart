@@ -21,7 +21,7 @@ class MainCalendar extends StatelessWidget {
         date.year == selectedDate.year &&
         date.month == selectedDate.month &&
         date.day == selectedDate.day,
-      focusedDay: DateTime.now(),
+      focusedDay: selectedDate,
       firstDay: DateTime(1000, 1, 1),
       lastDay: DateTime(3000, 1, 1),
       headerStyle: const HeaderStyle(
