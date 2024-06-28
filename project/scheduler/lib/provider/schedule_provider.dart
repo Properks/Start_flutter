@@ -4,6 +4,7 @@ import 'package:scheduler/model/schedule_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ScheduleProvider extends ChangeNotifier {
   final ScheduleRepository repository;
@@ -35,30 +36,50 @@ class ScheduleProvider extends ChangeNotifier {
     required ScheduleModel model
 }) async {
     final targetDate = model.date;
-    final resp = await repository.createSchedule(model: model);
     // resp은 저장된 스케쥴의 Id
+
+    final uuid = Uuid().v4();
+
+    final cacheSchedule = model.copyWith(id: uuid);
 
     cache.update(targetDate, (value) => [ // targetDate에 해당하는 원래 일정 다 가져오기
       ...value, // 원래 일정 뒤에 추가
-      model.copyWith(id: resp), // 스케쥴 내용에 id만 추가해서 삽입
+      cacheSchedule
       ]..sort(
         (a, b) => a.startTime.compareTo(b.startTime)
-      ), ifAbsent: () => [model.copyWith(id: resp)] // 해당 날짜의 일정이 없는 경우
+      ), ifAbsent: () => [cacheSchedule] // 해당 날짜의 일정이 없는 경우
     );
 
-    notifyListeners();
+    notifyListeners(); // 캐시 반영
+
+    try {
+      final resp = await repository.createSchedule(model: model);
+
+      cache.update(targetDate, (value) => value.map((e) => e.id == uuid ? e.copyWith(id: resp) : e).toList());
+    } catch (e) {
+      cache.update(targetDate, (value) => value.where((e) => e.id != uuid).toList());
+    }
+
+    notifyListeners(); // 캐시 반영
   }
 
   void deleteSchedule({
     required DateTime date,
     required String id
 }) async {
-    final resp = repository.deleteSchedule(id: id);
+    ScheduleModel? deletedSchedule = cache[date]!.firstWhere((element) => element.id == id);
+    cache.update(date, (value) => value.where((element) => element.id != id).toList());
 
-    cache.update(date, (value) =>
-      value.where((e) => e.id != id).toList(),
-      ifAbsent: () => []
-    );
+    try {
+      await repository.deleteSchedule(id: id);
+    } catch(e) {
+      cache.update(date, (value) => [
+        ...value,
+        deletedSchedule,
+      ]..sort((a, b) => a.startTime.compareTo(b.startTime))
+      );
+    }
+
 
     notifyListeners();
   }
