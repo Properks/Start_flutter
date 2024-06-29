@@ -19,16 +19,17 @@ void main() async {
 
   await initializeDateFormatting(); // intl 패키지 초기화 (다국어화)
 
-  final database = LocalDatabase();
+  // final database = LocalDatabase();
 
-  GetIt.I.registerSingleton<LocalDatabase>(database); // GetIt: 의존성 주입을 구현하여 프로젝트 전역에서 사용 가능하도록
-  final repository = ScheduleRepository();
-  final scheduleProvider = ScheduleProvider(repository: repository);
+  // GetIt.I.registerSingleton<LocalDatabase>(database); // GetIt: 의존성 주입을 구현하여 프로젝트 전역에서 사용 가능하도록
+  // final repository = ScheduleRepository();
+  // final scheduleProvider = ScheduleProvider(repository: repository);
   runApp(
-      ChangeNotifierProvider(
-        create: (_) => scheduleProvider,
-        child: const MyApp(),
-      )
+      // ChangeNotifierProvider(
+      //   create: (_) => scheduleProvider,
+      //   child: const MyApp(),
+      // )
+    const MyApp()
   );
 }
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
   }

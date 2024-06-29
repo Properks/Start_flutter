@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduler/component/main_calendar.dart';
@@ -59,16 +60,29 @@ class _HomeScreenState extends State<HomeScreen>{
               onDaySelected: (selectedDate, focusedDate) => onDaySelected(selectedDate, focusedDate, context),
             ),
             const SizedBox(height: 8,),
-            TodayBanner(
-              selectedDate: selectedDate,
-              count: 0,
+            StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('schedule').where(
+                'date',
+                isEqualTo: '${selectedDate.year}${selectedDate.month}${selectedDate.day}'
+              ).snapshots(),
+              builder: (context, snapshot) {
+                return TodayBanner(
+                  selectedDate: selectedDate,
+                  count: snapshot.data?.docs.length ?? 0,
+                );
+              },
             ),
+            // TodayBanner(
+            //   selectedDate: selectedDate,
+            //   count: 0,
+            // ),
             const SizedBox(height: 8,),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('schedule').where(
                     'date',
-                    isEqualTo: '${selectedDate.year}${selectedDate.month}${selectedDate.day}',
+                    isEqualTo: '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
+                  // padLeft를 추가하지 않으면 2024629로 나가고 데이터베이스에는 20240629로 저장되어서 못찾는다.
                 ).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -79,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen>{
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container();
                   }
-                  final schedules = snapshot.data!.docs.map((e) => ScheduleModel.fromJson(
+                  final schedules = snapshot.data!.docs.map((QueryDocumentSnapshot e) => ScheduleModel.fromJson(
                     json: (e.data() as Map<String, dynamic>),
                   )).toList();
 
@@ -92,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen>{
                         direction: DismissDirection.startToEnd, // 왼쪽에서 오른쪽으로 밀기
                         onDismissed: (DismissDirection direction) {
                           // provider.deleteSchedule(date: selectedDate, id: schedule.id);
+                          FirebaseFirestore.instance.collection('schedule').doc(schedule.id).delete();
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 8, left: 8, right: 8),
