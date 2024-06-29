@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduler/component/custom_text_field.dart';
@@ -7,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:scheduler/database/drift_database.dart';
 import 'package:scheduler/model/schedule_model.dart';
 import 'package:scheduler/provider/schedule_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -102,13 +105,25 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     if (key.currentState!.validate()) {
       key.currentState!.save();
 
-      context.read<ScheduleProvider>().createSchedule(model: ScheduleModel(
-        id: 'new model', // 임시 ID
+      final uuid = Uuid().v4();
+
+      final model = ScheduleModel(
+        id: uuid, // uuid
         content: content!,
         date: widget.selectedDate,
         startTime: startTime!,
         endTime: endTime!,
-      ));
+      );
+
+      await FirebaseFirestore.instance.collection('schedule').doc(model.id).set(model.toJson());
+
+      // context.read<ScheduleProvider>().createSchedule(model: ScheduleModel(
+      //   id: 'new model', // 임시 ID
+      //   content: content!,
+      //   date: widget.selectedDate,
+      //   startTime: startTime!,
+      //   endTime: endTime!,
+      // ));
 
       Navigator.of(context).pop(); // 현재 스택에서 화면 제거. 즉, 현재 화면에서 Bottom sheet 제거
     }

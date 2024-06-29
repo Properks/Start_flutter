@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduler/component/main_calendar.dart';
@@ -7,20 +8,30 @@ import 'package:scheduler/component/today_banner.dart';
 import 'package:scheduler/const/colors.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scheduler/database/drift_database.dart';
+import 'package:scheduler/model/schedule_model.dart';
 import 'package:scheduler/provider/schedule_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget{
+
+
+  @override
+  State<StatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>{
   DateTime selectedDate = DateTime.utc(
     DateTime.now().year,
     DateTime.now().month,
     DateTime.now().day,
   );
 
+
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ScheduleProvider>();
-    final selectedDate = provider.selectedTime;
-    final schedules = provider.cache[selectedDate] ?? [];
+    // final provider = context.watch<ScheduleProvider>();
+    // final selectedDate = provider.selectedTime;
+    // final schedules = provider.cache[selectedDate] ?? [];
+    final schedules = FirebaseFirestore.instance.collection('schedule').get();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -50,28 +61,48 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 8,),
             TodayBanner(
               selectedDate: selectedDate,
-              count: schedules.length,
+              count: 0,
             ),
             const SizedBox(height: 8,),
             Expanded(
-              child: ListView.builder(
-                itemCount: schedules.length,
-                itemBuilder: (context, index) {
-                  final schedule = schedules[index];
-                  return Dismissible(
-                    key: ObjectKey(schedule.id), // 키 값을 schedule의 키로
-                    direction: DismissDirection.startToEnd, // 왼쪽에서 오른쪽으로 밀기
-                    onDismissed: (DismissDirection direction) {
-                      provider.deleteSchedule(date: selectedDate, id: schedule.id);
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('schedule').where(
+                    'date',
+                    isEqualTo: '${selectedDate.year}${selectedDate.month}${selectedDate.day}',
+                ).snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text("일정을 가져오지 못했습니다."),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
+                  final schedules = snapshot.data!.docs.map((e) => ScheduleModel.fromJson(
+                    json: (e.data() as Map<String, dynamic>),
+                  )).toList();
+
+                  return ListView.builder(
+                    itemCount: schedules.length,
+                    itemBuilder: (context, index) {
+                      final schedule = schedules[index];
+                      return Dismissible(
+                        key: ObjectKey(schedule.id), // 키 값을 schedule의 키로
+                        direction: DismissDirection.startToEnd, // 왼쪽에서 오른쪽으로 밀기
+                        onDismissed: (DismissDirection direction) {
+                          // provider.deleteSchedule(date: selectedDate, id: schedule.id);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                          child: ScheduleCard(
+                            startTime: schedule.startTime,
+                            endTime: schedule.endTime,
+                            content: schedule.content,
+                          ),
+                        ),
+                      );
                     },
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                      child: ScheduleCard(
-                        startTime: schedule.startTime,
-                        endTime: schedule.endTime,
-                        content: schedule.content,
-                      ),
-                    ),
                   );
                 },
               ),
@@ -83,8 +114,11 @@ class HomeScreen extends StatelessWidget {
   }
 
   void onDaySelected(DateTime selectedDate, DateTime focusedDate, BuildContext context) {
-    final provider = context.read<ScheduleProvider>();
-    provider.changeSchedule(date: selectedDate);
-    provider.getSchedules(date: selectedDate);
+    // final provider = context.read<ScheduleProvider>();
+    // provider.changeSchedule(date: selectedDate);
+    // provider.getSchedules(date: selectedDate);
+    setState(() {
+      this.selectedDate = selectedDate;
+    });
   }
 }

@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:scheduler/database/drift_database.dart';
+import 'package:scheduler/firebase_options.dart';
 import 'package:scheduler/provider/schedule_provider.dart';
 import 'package:scheduler/repository/schedule_repository.dart';
 import 'package:scheduler/screen/home_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 플러터 프레임 워크 준비
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await initializeDateFormatting(); // intl 패키지 초기화 (다국어화)
 
