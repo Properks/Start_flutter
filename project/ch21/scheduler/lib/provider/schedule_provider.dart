@@ -3,7 +3,10 @@ import 'package:calendar_scheduler/repository/schedule_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../repository/auth_repository.dart';
+
 class ScheduleProvider extends ChangeNotifier {
+  final AuthRepository authRepository;
   final ScheduleRepository scheduleRepository;  // ➊ API 요청 로직을 담은 클래스
 
   DateTime selectedDate = DateTime.utc(  // ➋ 선택한 날짜
@@ -12,11 +15,13 @@ class ScheduleProvider extends ChangeNotifier {
     DateTime.now().day,
   );
   Map<DateTime, List<ScheduleModel>> cache = {};  // ➌ 일정 정보를 저장해둘 변수
+  String? accessToken;
+  String? refreshToken;
 
   ScheduleProvider({
+    required this.authRepository,
     required this.scheduleRepository,
-  }) : super() {
-  }
+  }) : super() {}
 
   void getSchedules({
     required DateTime date,
@@ -112,6 +117,59 @@ class ScheduleProvider extends ChangeNotifier {
     required DateTime date,
   }) {
     selectedDate = date;  // 현재 선택된 날짜를 매개변수로 입력받은 날짜로 변경
+    notifyListeners();
+  }
+
+ Future<void> register({
+   required String email,
+   required String password,
+ })  async {
+    final response = await authRepository.register(email: email, password: password);
+
+    updateToken(refreshToken: response.refreshToken, accessToken: response.accessToken);
+ }
+
+ Future<void> login({
+   required String email,
+   required String password,
+ }) async {
+    final response = await authRepository.login(email: email, password: password);
+
+    updateToken(refreshToken: response.refreshToken, accessToken: response.accessToken);
+ }
+
+ logout() {
+    refreshToken = accessToken = null;
+    cache = {};
+    notifyListeners();
+ }
+
+ rotateToken({
+   required String refreshToken,
+   required bool isRefreshToken,
+ }) async {
+    if (isRefreshToken) {
+      this.refreshToken = await authRepository.rotateRefreshToken(refreshToken: refreshToken);
+    }
+    else {
+      accessToken = await authRepository.rotateAccessToken(refreshToken: refreshToken);
+    }
+
+    notifyListeners();
+ }
+
+  void updateToken({
+    String? refreshToken,
+    String? accessToken,
+  }) async {
+    if (refreshToken != null) {
+      this.refreshToken = refreshToken;
+    }
+
+    if (accessToken != null) {
+      this.accessToken = accessToken;
+    }
+
     notifyListeners();
   }
 }
