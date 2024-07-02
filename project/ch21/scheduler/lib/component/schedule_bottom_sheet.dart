@@ -108,7 +108,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     );
   }
 
-  void onSavePressed(BuildContext context) async {    if (formKey.currentState!.validate()) {
+  void onSavePressed(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
       // ➊ 폼 검증하기
       formKey.currentState!.save(); // ➋ 폼 저장하기
 
