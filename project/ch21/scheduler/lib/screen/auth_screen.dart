@@ -50,11 +50,11 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 16,),
               ElevatedButton(
-                onPressed: onLogin(provider),
+                onPressed: () => onLogin(provider),
                 child: Text("로그인"),
               ),
               TextButton(
-                onPressed: onRegister(provider),
+                onPressed: () => onRegister(provider),
                 child: Text("회원 가입"),
               )
             ],
