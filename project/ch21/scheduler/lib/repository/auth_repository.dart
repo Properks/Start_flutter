@@ -44,7 +44,7 @@ class AuthRepository {
     );
 
     return (refreshToken: response.data['refreshToken'] as String,
-    accessToken: response.data['accesstoken'] as String);
+    accessToken: response.data['accessToken'] as String);
   }
 
   Future<String> rotateRefreshToken({

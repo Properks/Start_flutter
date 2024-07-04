@@ -43,7 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 8,),
               // 비밀번호
               LoginTextField(
-                onSaved: (val) => email = val!,
+                onSaved: (val) => password = val!,
                 validator: passwordValidator,
                 obscureText: true,
                 hintText: "비밀번호",
@@ -140,7 +140,7 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       await provider.login(email: email, password: password);
     } on DioError catch(e) {
-      e.response?.data['message'] ?? "알 수 없는 에러입니다.";
+      message = e.response?.data['message'] ?? "알 수 없는 에러입니다.";
     } catch(e) {
       message = "알 수 없는 에러입니다.";
     }
